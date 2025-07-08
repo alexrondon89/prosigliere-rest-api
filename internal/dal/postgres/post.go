@@ -118,7 +118,7 @@ func (pg *PostgresRepo) GetAllPostsFromDb(ctx context.Context) ([]model.Post, er
 		GROUP BY p.id, p.title, p.content, p.created_at
 		ORDER BY p.created_at DESC; `
 
-	var posts []model.Post
+	posts := []model.Post{}
 	rows, err := pg.pool.Query(ctx, query)
 	if err != nil {
 		return nil, err

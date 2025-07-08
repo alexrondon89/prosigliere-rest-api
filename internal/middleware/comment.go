@@ -12,10 +12,6 @@ func ValidateNewComment() fiber.Handler {
 			return fiber.NewError(fiber.StatusBadRequest, "body not valid JSON")
 		}
 
-		if input.PostId == "" {
-			return fiber.NewError(fiber.StatusBadRequest, "post id is required")
-		}
-
 		if input.Username == "" {
 			return fiber.NewError(fiber.StatusBadRequest, "username is required")
 		}

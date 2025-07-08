@@ -8,7 +8,9 @@ import (
 
 func ValidateNewPost() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		var input model.Post
+		input := model.Post{
+			Comments: []model.Comment{},
+		}
 		if err := c.BodyParser(&input); err != nil {
 			return fiber.NewError(fiber.StatusBadRequest, "body not valid JSON")
 		}
