@@ -24,7 +24,7 @@ func main() {
 	// root ctx
 	ctx := context.Background()
 	// postgres storage
-	pg := postgres.NewPostgresRepo(ctx, "postgres://postgres:postgres@localhost:5432/prosigliere")
+	pg := postgres.NewPostgresRepo(ctx, "postgres://postgres:postgres@db:5432/prosigliere?sslmode=disable")
 	//services
 	postSrv := service.NewPostService(pg)
 	commentSrv := service.NewCommentService(pg)

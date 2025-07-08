@@ -39,6 +39,8 @@ func (pg *PostgresRepo) GetPostFromDb(ctx context.Context, id string) (*model.Po
 			FROM   blog.comment
 			WHERE  blog_post_id = $1
 			ORDER  BY created_at DESC
+			OFFSET 0
+			LIMIT  30
 		)
 		SELECT  p.id,
 				p.title,
@@ -86,6 +88,8 @@ func (pg *PostgresRepo) GetAllPostsFromDb(ctx context.Context) ([]model.Post, er
 			SELECT id, title, content, created_at
 			FROM   blog.blog_post
 			ORDER  BY created_at DESC
+			OFFSET 0
+			LIMIT  50
 		), comments_src AS (
 			SELECT c.*,
 				   ROW_NUMBER() OVER (
@@ -103,6 +107,7 @@ func (pg *PostgresRepo) GetAllPostsFromDb(ctx context.Context) ([]model.Post, er
 				  json_agg(
 					json_build_object(
 					  'id',        c.id,
+					  'blog_post_id',   c.blog_post_id,
 					  'username',  c.username,
 					  'content',   c.content,
 					  'createdAt', c.created_at
