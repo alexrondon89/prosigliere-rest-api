@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/alexrondon89/prosigliere-rest-api/internal/handler"
+	"github.com/alexrondon89/prosigliere-rest-api/internal/middleware"
 	"github.com/gofiber/fiber/v2"
 	"log"
 	"os"
@@ -19,15 +20,18 @@ func main() {
 
 	// handler
 	h := handler.NewHandler()
+
 	app := fiber.New()
+	//global middlewares
+	app.Use(middleware.Recover())
 	// group
 	group := app.Group("/api/posts")
 	// post routes
 	group.Get("/", h.GetAllPosts)
-	group.Post("/", h.CreateBlogPost)
-	group.Get("/:id", h.GetPostById)
+	group.Post("/", middleware.ValidateNewPost(), h.CreateBlogPost)
+	group.Get("/:id", middleware.ValidatePostIdFormat(), h.GetPostById)
 	// comment routes
-	group.Post("/:id/comments", h.CreateComment)
+	group.Post("/:id/comments", middleware.ValidatePostIdFormat(), middleware.ValidateNewComment(), h.CreateComment)
 
 	//init server
 	if err := app.Listen(":3000"); err != nil {
