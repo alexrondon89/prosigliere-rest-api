@@ -4,14 +4,12 @@ import (
 	"github.com/alexrondon89/prosigliere-rest-api/internal/model"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"log"
 )
 
 func ValidateNewPost() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		var input model.Post
 		if err := c.BodyParser(&input); err != nil {
-			log.Printf("[Middleware-ValidateNewPost] error: %v", err)
 			return fiber.NewError(fiber.StatusBadRequest, "body not valid JSON")
 		}
 
