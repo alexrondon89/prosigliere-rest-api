@@ -55,6 +55,7 @@ func (ps *PostService) GetAllPosts(ctx context.Context) ([]model.Post, error) {
 	resp, err := ps.postStorage.GetAllPostsFromDb(ctx)
 	if err != nil {
 		log.Printf("[Service-GetAllPosts] get all posts from database failed: %v", err)
+		return nil, err
 	}
 	return resp, err
 }

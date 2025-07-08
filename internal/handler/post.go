@@ -20,6 +20,7 @@ func (p *Handler) CreateBlogPost(c *fiber.Ctx) error {
 	resp, err := p.postService.CreatePost(c.Context(), input)
 	if err != nil {
 		log.Printf("[Handler-CreateBlogPost] request to create post failed: %v", err)
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	return c.Status(fiber.StatusCreated).JSON(resp)
 }
@@ -29,6 +30,7 @@ func (p *Handler) GetPostById(c *fiber.Ctx) error {
 	resp, err := p.postService.GetPost(c.Context(), id)
 	if err != nil {
 		log.Printf("[Handler-GetPostById] request to get post failed: %v", err)
+		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
 	return c.Status(fiber.StatusOK).JSON(resp)
 }

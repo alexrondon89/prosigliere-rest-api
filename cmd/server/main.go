@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"github.com/alexrondon89/prosigliere-rest-api/internal/dal/postgres"
 	"github.com/alexrondon89/prosigliere-rest-api/internal/handler"
 	"github.com/alexrondon89/prosigliere-rest-api/internal/middleware"
 	"github.com/alexrondon89/prosigliere-rest-api/internal/service"
@@ -19,9 +21,13 @@ func main() {
 		}
 	}()
 
+	// root ctx
+	ctx := context.Background()
+	// postgres storage
+	pg := postgres.NewPostgresRepo(ctx, "postgres://postgres:postgres@localhost:5432/prosigliere")
 	//services
-	postSrv := service.NewPostService(nil)
-	commentSrv := service.NewCommentService(nil)
+	postSrv := service.NewPostService(pg)
+	commentSrv := service.NewCommentService(pg)
 	// handler
 	h := handler.NewHandler(postSrv, commentSrv)
 	// server
@@ -39,6 +45,6 @@ func main() {
 
 	//init server
 	if err := app.Listen(":3000"); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }
